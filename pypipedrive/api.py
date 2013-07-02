@@ -104,13 +104,4 @@ if __name__ == "__main__":
     api_token = environ.get('PIPEDRIVE_API_TOKEN')
     p = PipeDrive(api_token)
     r = p.persons(limit=5)
-    # r = p.persons.find(term='Sherepa')
-    # r = p.activities._id(_id='1', method='DELETE')
-    # r = p.persons.find(term='Sherepa Andriy')
-    # r = p.persons(method='POST', name='Sidorenko Org.Not.Found.', org_id=2)
-    # r = p.persons(method='POST', name='Sidorenko V.V.')
-    # r = p.persons._id(method='PUT', _id='1', name='Andriy S.')
-
-    # kwargs = {'method': 'POST', 'name': 'Ivanov I.I.'}
-    # r = p.persons(**kwargs)
     print r
