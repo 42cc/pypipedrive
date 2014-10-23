@@ -1,9 +1,13 @@
 # coding: utf-8
+import logging
 
 import requests
 from os import environ
 
 PIPEDRIVE_API_URL = 'https://api.pipedrive.com/v1/'
+
+
+logger = logging.getLogger('pypipedrive')
 
 
 class PipeDriveError(StandardError):
@@ -78,6 +82,11 @@ class PipeDrive(object):
             method = 'GET'
         if method not in ['GET', 'POST', 'PUT', 'DELETE']:
             raise BasePipedError(u'The method is not specified correctly')
+        logger.debug(
+            '{method} {url}, params: {params}'.format(
+                method=method,
+                url="%s%s" % (self.api_url, base),
+                params=params))
         # Merge the user settings with default settings and exec
         query_params = dict(self.default_params, **params)
         if method == 'GET':
