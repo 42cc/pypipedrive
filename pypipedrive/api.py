@@ -65,7 +65,9 @@ class PipeDrive(object):
     def __init__(self, api_token):
         self.api_token = api_token
         self.api_url = PIPEDRIVE_API_URL
-        self.default_params = {'api_token': api_token}
+        self.default_params = {}
+        self.session = requests.Session()
+        self.session.headers['X-API-Token'] = api_token
 
     def __getattr__(self, key):
         return Method(self, key)
@@ -89,14 +91,11 @@ class PipeDrive(object):
                 params=params))
         # Merge the user settings with default settings and exec
         query_params = dict(self.default_params, **params)
+        url = "%s%s" % (self.api_url, base)
         if method == 'GET':
-            url = "%s%s" % (self.api_url, base)
-            r = requests.get(url, params=query_params)
+            r = self.session.get(url, params=query_params)
         else:
-            url = "%s%s?api_token=%s" % \
-                (self.api_url, base, query_params['api_token'])
-            del query_params['api_token']
-            r = getattr(requests, method.lower())(url, data=query_params)
+            r = getattr(self.session, method.lower())(url, data=query_params)
         response = r.json()
         if 'error' in response:
             raise APIPipedError(response)
